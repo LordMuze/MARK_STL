@@ -2,34 +2,34 @@
 #include "SingleLinkedList.h"
 
 void insertion_case(MK2::sllist* new_list){
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->push_front(4);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->push_front(5);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->push_front(6);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
 }
 
 
 void insertion_test_case(MK2::sllist* new_list){
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->insert(4, 0);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    new_list->insert_after(4, 0);
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->insert(5, 0);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    new_list->insert_after(5, 0);
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->insert(6, 1);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    new_list->insert_after(6, 1);
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->insert(4, 2);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    new_list->insert_after(4, 2);
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
 }
 
@@ -41,32 +41,35 @@ void delete_case(MK2::sllist* new_list){
 }
 
 void remove_slowly(MK2::sllist* new_list){
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->remove_first(6);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->remove_first(5);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->remove_first(4);
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
 
 }
 
 
 void pop_test(MK2::sllist* new_list){
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->pop_front();
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->pop_front();
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
     new_list->pop_front();
-    std::cout<<"The size of the list is: "<<new_list->size()<<std::endl;
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+    new_list->print();
+    new_list->pop_front();
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
 }
 
@@ -81,7 +84,10 @@ int main(){
     MK2::sllist* new_list = new MK2::sllist{};
     insertion_test_case(new_list);
     //delete_case(new_list);
-    find_test(new_list);
-    pop_test(new_list);
+    // find_test(new_list);
+    // pop_test(new_list);
+    new_list->re_size(9);
+    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+    new_list->print();
     return 0;
 }

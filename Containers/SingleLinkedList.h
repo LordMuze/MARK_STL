@@ -26,9 +26,15 @@ namespace MK2 {
 
 		// Copy assignment operator
 		sllist& operator=(sllist const&);
-
-		// Return the count of elements 
-		size_t size() const;
+		/*!*************************************************************************
+    ****       	\brief Resize the container by deleting or adding n number of nodes
+                \return true if successfully resized
+				\return false if unsuccessfully resized
+                ****************************************************************************
+    ***/
+		bool re_size(size_t n);
+		// Returns the count of elements of the container
+		size_t getSize() const;
 
 		// Add a new value to the beginning 
 		void push_front(int value);
@@ -52,7 +58,7 @@ namespace MK2 {
 		// 0 to 3. Then a call to insert() with index 4 would insert value as last
 		// element of list. In the same example, if index is 10, then the value is
 		// inserted at index 4. 
-		void insert(int value, size_t position);
+		void insert_after(int value, size_t position);
 
 		/*!*************************************************************************
     ****       	\brief removes the first occurence of value specified in the linked list
@@ -66,6 +72,9 @@ namespace MK2 {
 	protected:
 
 		slnode* head;
+		slnode* tail;
+	private:
+		size_t size;
 	};
 
 
