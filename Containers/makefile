@@ -5,9 +5,9 @@ CXX_FLAGS = -std=c++17 -pedantic-errors -Wall -Wextra -Werror
 # flag to linker to make it link with math library
 LDLIBS    = -lm
 # list of object files
-OBJS      = vct-driver.o str.o
+OBJS      = SingleLinkedList_test.o
 # name of executable program
-EXEC      = vct.out
+EXEC      = sll.out
 OUTPUT    =your-output.txt result.txt
 
 # by convention the default target (the target that is built when writing
@@ -29,13 +29,8 @@ all : $(EXEC)
 $(EXEC) : $(OBJS)
 	$(CXX) $(CXX_FLAGS) $(OBJS) -o $(EXEC) $(LDLIBS)
 
-# target dllist-driver.o depends on both dllist-driver.cpp and dllist.h
-# and is created with command $(CXX) given the options $(CXX_FLAGS)
-vct-driver.o : vct-driver.cpp vct.hpp
-	$(CXX) $(CXX_FLAGS) -c vct-driver.cpp -o vct-driver.o
-
-str.o : str.cpp vct.hpp
-	$(CXX) $(CXX_FLAGS) -c str.cpp -o str.o
+$(OBJS) : SingleLinkedList_test.cpp SingleLinkedList.hpp
+	$(CXX) $(CXX_FLAGS) -c SingleLinkedList.hpp SingleLinkedList_test.cpp
 
 # says that clean is not the name of a target file but simply the name for
 # a recipe to be executed when an explicit request is made
@@ -57,6 +52,6 @@ rebuild :
 
 .PHONY : test
 test : $(EXEC)
-	./$(EXEC) 4 > your-output.txt
-	diff -y --strip-trailing-cr your-output.txt test4.txt > result.txt
+	./$(EXEC)
+#diff -y --strip-trailing-cr your-output.txt test4.txt > result.txt
 #diff -y --strip-trailing-cr --suppress-common-lines your-output.txt test0.txt

@@ -1,96 +1,93 @@
 #include <iostream>
-#include "SingleLinkedList.h"
+#include "SingleLinkedList.hpp"
 
-void insertion_case(MK2::sllist* new_list){
+template <typename T>
+void insertion_case(MK2::sllist<T> * new_list){
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->push_front(4);
+    new_list->push_front(4.03);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->push_front(5);
+    new_list->push_front(5.01);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
-    new_list->push_front(6);
+    new_list->push_front(6.2);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     new_list->print();
 }
 
-
-void insertion_test_case(MK2::sllist* new_list){
+template <typename T>
+void insertion_test_case(MK2::sllist<T>* new_list){
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->insert_after(4, 0);
+    std::cout<<new_list;
+    new_list->insert_after(4.01, 0);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->insert_after(5, 0);
+    std::cout<<new_list;
+    new_list->insert_after(5.05, 0);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->insert_after(6, 4);
+    std::cout<<new_list;
+    new_list->insert_after(6.40, 4);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->insert_after(4, 2);
+    std::cout<<new_list;
+    new_list->insert_after(4.52, 2);
     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
+    std::cout<<new_list;
 }
 
-void delete_case(MK2::sllist* new_list){
-    std::cout<<std::endl;
-    std::cout<<"The list is about to be cleared!"<<std::endl;
-    new_list->clear();
-    new_list->print();
-}
+// void delete_case(MK2::sllist* new_list){
+//     std::cout<<std::endl;
+//     std::cout<<"The list is about to be cleared!"<<std::endl;
+//     new_list->clear();
+//     new_list->print();
+// }
 
-void remove_slowly(MK2::sllist* new_list){
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->remove_first(6);
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->remove_first(5);
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->remove_first(4);
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
+// void remove_slowly(MK2::sllist* new_list){
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->remove_first(6);
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->remove_first(5);
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->remove_first(4);
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
 
-}
+// }
 
 
-void pop_test(MK2::sllist* new_list){
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->pop_front();
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->pop_front();
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->pop_front();
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-    new_list->pop_front();
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
-    new_list->print();
-}
-
-void find_test(MK2::sllist* new_list){
-    MK2::sllist::slnode* result = new_list->find(4);
+// void pop_test(MK2::sllist* new_list){
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->pop_front();
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->pop_front();
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->pop_front();
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+//     new_list->pop_front();
+//     std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+//     new_list->print();
+// }
+template<typename T>
+void find_test(MK2::sllist<T>* new_list){
+    // MK2::sllist<T>::slnode<T>* result = new_list->find(4);
+    typename MK2::sllist<T>::template slnode<T>* result = new_list->find(4.52);
     std::cout<<"The value of found node is: "<<result->value<<std::endl;
 }
 
-
 int main(){
     std::cout<<"Single Linked List Test"<<std::endl;
-    MK2::sllist* new_list = new MK2::sllist{};
-    // insertion_test_case(new_list);
-    //delete_case(new_list);
-    // find_test(new_list);
-    // pop_test(new_list);
-    //new_list->re_size(9);
+    MK2::sllist<double>* new_list = new MK2::sllist<double>{};
+
     insertion_test_case(new_list);
-    std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
+    // std::cout<<"The getSize of the list is: "<<new_list->getSize()<<std::endl;
     // new_list->print();
+    find_test(new_list);
     std::cout<<new_list<<std::endl;
-    
     return 0;
 }
