@@ -68,7 +68,12 @@ namespace MK2 {
     ***/
 		bool remove_first(int value);
 
+		friend std::ostream& operator<<(std::ostream& output, sllist const& list);
 
+		friend std::ostream& operator<<(std::ostream& output, sllist const* list);
+
+
+		
 	protected:
 
 		slnode* head;

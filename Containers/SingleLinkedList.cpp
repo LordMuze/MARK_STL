@@ -57,6 +57,9 @@ namespace MK2{
         this->head = nullptr;
         this->size = 0;
     }
+
+
+
     //std io stream print
     void sllist::print() const{
         slnode* child_node = this->head;
@@ -67,6 +70,27 @@ namespace MK2{
         std::cout<<std::endl;
     }
 
+    std::ostream& operator<<(std::ostream& os, sllist const& list){
+        sllist::slnode* child_node = list.head;
+        while(child_node){
+            os<<child_node->value<<" ";
+            child_node = child_node->next;
+        }
+        os<<std::endl;
+        return os;
+    }
+
+    std::ostream& operator<<(std::ostream& os, sllist const* list){
+        sllist::slnode* child_node = list->head;
+        while(child_node){
+            os<<child_node->value<<" ";
+            child_node = child_node->next;
+        }
+        os<<std::endl;
+        return os;
+    }
+
+
     void sllist::push_front(int value) {
         //objects are stored on heap and not on stack
         slnode* new_node = new slnode;
@@ -75,12 +99,16 @@ namespace MK2{
         new_node->next = this->head;
         // (new_node = head) --> (old_head) *old_head is just another node after the assignment below:
         this->head = new_node;
+        if(this->size == 0){
+            this->tail = new_node;
+        }
         this->size++;
     }
 
     bool sllist::re_size(size_t n) {
         size_t cur_size = this->getSize();
-        // n < cur_size
+
+        // // n < cur_size
         // remove elements at the n position until the end of the list 
         if(n < cur_size){
             slnode* begin = this->head;
@@ -109,9 +137,14 @@ namespace MK2{
             this->tail->next = nullptr;
             this->size = this->size - n;
         }else{
+
             //if n is more than current size of the container
             size_t n_cnt = n - this->size;
             slnode* begin = this->tail;
+            if(this->size == 0){
+                this->head = this->tail;
+            }
+        
             for(size_t index = 0; index < n_cnt; ++index){
                 slnode* new_node = new slnode;
                 new_node->value = 0;
@@ -119,6 +152,7 @@ namespace MK2{
                 begin = begin->next;
             }
             this->size = n;
+            this->tail = begin;
         }
         return true;
     }
@@ -167,6 +201,9 @@ namespace MK2{
         this->head = del_node->next;
         delete del_node;
         this->size--;
+        if(this->size == 1){
+            this->tail = this->head;
+        }
     }
 
 
@@ -181,13 +218,9 @@ namespace MK2{
         }
         while(child_node){
             //#Second Case (head) --> (node_2) --> (node_3 (to be inserted))
-            if (count == list_size-1 && position >= count){
-                slnode* new_node = new slnode;
-                new_node->value = value;
-                child_node->next = new_node;
-                new_node->next = nullptr;
-                this->tail = new_node;
-                this->size++;
+            if (count == list_size-1 && position > count){
+                this->re_size(list_size + 1);
+                (this->tail)->value = value;
                 break;
             //#Third Case (head) --> (node_2 (to be inserted)) --> (node_3)
             }else if(position == count && position < list_size){
