@@ -53,7 +53,14 @@ namespace MK2 {
 
 		// Find first occurrence 
 		slnode<T>* find(T value) const;
-
+/*!*************************************************************************
+    ****       	\brief Returns the queried node by index. If index is larger than the array size, returns nullptr. //throwing an exception will be a thing in the future
+                \return slnode reference
+				\return nullptr if larger than array size or invalid value (i.e. negative value) 
+****************************************************************************
+***/
+		//T& operator[](size_t index);
+		slnode<T>& operator[](size_t index);
 		// Insert value in linked list at index.
 		// Assume zero-based indexing with 1st element at index 0, the second element
 		// at index 1, and so on. If list has 4 elements, their indices range from
@@ -129,9 +136,6 @@ namespace MK2 {
 
         }
     }
-
-
-
 
 
 	//Destructor
@@ -322,7 +326,21 @@ namespace MK2 {
         }
         return res;
     }
+	template<typename T>
+	sllist<T>::slnode<T>& sllist<T>::operator[](size_t index){
 
+
+			slnode<T>* begin = this->head;
+			for(size_t pos = 0; pos < this->size; ++pos){
+				if(pos == index){
+					break;
+				}
+				begin = begin->next;
+			}
+			slnode<T>& res = *begin;
+			return res;
+		
+	}
 } // end namespace hlp2
 #endif
 

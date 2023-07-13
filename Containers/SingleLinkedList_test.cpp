@@ -76,8 +76,9 @@ void insertion_test_case(MK2::sllist<T>* new_list){
 template<typename T>
 void find_test(MK2::sllist<T>* new_list){
     // MK2::sllist<T>::slnode<T>* result = new_list->find(4);
-    typename MK2::sllist<T>::template slnode<T>* result = new_list->find(4.52);
-    std::cout<<"The value of found node is: "<<result->value<<std::endl;
+    typename MK2::sllist<T>::template slnode<T> result = (*new_list)[3];
+    //T& lmao = (*new_list)[3];
+    std::cout<<"The value of found node is: "<<result.value<<std::endl;
 }
 
 int main(){
