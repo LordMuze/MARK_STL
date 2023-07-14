@@ -59,8 +59,7 @@ namespace MK2 {
 				\return nullptr if larger than array size or invalid value (i.e. negative value) 
 ****************************************************************************
 ***/
-		//T& operator[](size_t index);
-		slnode<T>& operator[](size_t index);
+		T& operator[](size_t index);
 		// Insert value in linked list at index.
 		// Assume zero-based indexing with 1st element at index 0, the second element
 		// at index 1, and so on. If list has 4 elements, their indices range from
@@ -237,7 +236,7 @@ namespace MK2 {
         
             for(size_t index = 0; index < n_cnt; ++index){
                 slnode<T>* new_node = new slnode<T>;
-                new_node->value = 0;
+                new_node->value = T(); //template constructor of any type e.g. std::string()
                 begin->next = new_node;
                 begin = begin->next;
             }
@@ -246,6 +245,17 @@ namespace MK2 {
         }
         return true;
 	}
+
+	template<typename T>
+	void sllist<T>::pop_front(){
+        slnode<T>* del_node = this->head;
+        this->head = del_node->next;
+        delete del_node;
+        this->size--;
+        if(this->size == 1){
+            this->tail = this->head;
+        }
+    }
 
 	template<typename T>
 	void sllist<T>::insert_after(T value, size_t position){
@@ -327,9 +337,7 @@ namespace MK2 {
         return res;
     }
 	template<typename T>
-	sllist<T>::slnode<T>& sllist<T>::operator[](size_t index){
-
-
+	T& sllist<T>::operator[](size_t index){
 			slnode<T>* begin = this->head;
 			for(size_t pos = 0; pos < this->size; ++pos){
 				if(pos == index){
@@ -337,7 +345,7 @@ namespace MK2 {
 				}
 				begin = begin->next;
 			}
-			slnode<T>& res = *begin;
+			T& res = begin->value;
 			return res;
 		
 	}
