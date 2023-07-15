@@ -18,40 +18,90 @@ namespace MK2 {
 			U value;  // data portion
 			slnode* next;
 		};
-		//Default ctor
+/*!*****************************************************************************       	
+    \brief Default Constructor
+*******************************************************************************/
+
+
 		sllist();
 
-		// Copy ctor
+/*!*****************************************************************************       	
+    \brief Copy Constructor
+    \param forward_list
+*******************************************************************************/
+
+
 		sllist(sllist<T> const&);
-		// Destructor
+/*!*****************************************************************************       	
+    \brief Destructor
+*******************************************************************************/
+
+
 		~sllist();
 
-		// Copy assignment operator
-		sllist<T>& operator=(sllist<T> const&);
-		/*!*************************************************************************
-    ****       	\brief Resize the container by deleting or adding n number of nodes
-                \return true if successfully resized
-				\return false if unsuccessfully resized
-                ****************************************************************************
-    ***/
-		bool re_size(size_t n);
-		// Returns the count of elements of the container
-		size_t getSize() const;
+/*!*****************************************************************************       	
+    \brief Copy Assignment Operator
+    \param forward_list_reference
+*******************************************************************************/
 
-		// Add a new value to the beginning 
+
+		sllist<T>& operator=(sllist<T> const&);
+/*!*****************************************************************************       	
+    \brief Resize the container by deleting or adding n number of nodes
+    \param size_t no. of total elements in the list
+    \return true if successfully resized
+    \return false if unsuccessfully resized
+*******************************************************************************/
+
+
+		bool re_size(size_t n);
+/*!*****************************************************************************       	
+    \brief Returns the size of the list
+    \return size_t
+*******************************************************************************/
+
+
+		constexpr size_t getSize() const noexcept;
+
+/*!*****************************************************************************       	
+    \brief Pushes a node to the front of the list. Increment the list size by 1 too.
+    \param Object()
+*******************************************************************************/
+
+
 		void push_front(T value);
 
-		// Remove the front node
+/*!*****************************************************************************       	
+    \brief Delete a node from the front of the list. Decrement the list size by 1 too.
+*******************************************************************************/
+
+
 		void pop_front();
 
 
-		//Clears the list 
-		void clear();
+/*!*****************************************************************************       	
+    \brief Deletes all the nodes within the list
+*******************************************************************************/
 
-		// Print the contents 
-		void print() const;
 
-		// Find first occurrence 
+		constexpr void clear();
+
+/*!*****************************************************************************       	
+    \brief Prints the list, node values to std::cout
+*******************************************************************************/ 
+
+
+
+		constexpr void print() const;
+
+/*!*****************************************************************************       	
+    \brief Finds the first matching occurence specified by argument, from the front of the list
+    \param Object() value to match
+    \return forward_list node pointer
+    \warning Use for debugging only
+*******************************************************************************/ 
+
+
 		slnode<T>* find(T value) const;
 /*!*************************************************************************
     ****       	\brief Returns the queried node by index. If index is larger than the array size, returns nullptr. //throwing an exception will be a thing in the future
@@ -59,24 +109,50 @@ namespace MK2 {
 				\return nullptr if larger than array size or invalid value (i.e. negative value) 
 ****************************************************************************
 ***/
-		T& operator[](size_t index);
+		
+
+
+        T& operator[](size_t index);
+
+/*!*************************************************************************
+    ****       	\brief Inserts a node containing the value specified by argument at a specified position within the list
+                \brief If position is more than list, insert at the last end of the list
+                \brief If position < 1, insert at the front of the list
+                \return slnode reference
+				\return nullptr if larger than array size or invalid value (i.e. negative value) 
+****************************************************************************
+***/
+
 		// Insert value in linked list at index.
 		// Assume zero-based indexing with 1st element at index 0, the second element
 		// at index 1, and so on. If list has 4 elements, their indices range from
 		// 0 to 3. Then a call to insert() with index 4 would insert value as last
 		// element of list. In the same example, if index is 10, then the value is
 		// inserted at index 4. 
+
 		void insert_after(T value, size_t position);
 
-		/*!*************************************************************************
-    ****       	\brief removes the first occurence of value specified in the linked list
-                \return true if successfully found and remove.
-				\return false if not found or unable to remove
-                ****************************************************************************
-    ***/
+/*!*************************************************************************
+    ****       	\brief Remove a node based on the argument specified 
+				\param Object()
+                \return True if successfully removed - found and removed
+                \return False if not succesfully removed - error OR not found
+****************************************************************************
+***/
+
+
 		bool remove_first(T value);
 
 		// friend std::ostream& operator<<(std::ostream& output, sllist<T> const& list);
+
+/*!*************************************************************************
+    ****       	\brief Prints the entire list to the std::cout stream
+				\param Object()
+                \return True if successfully removed - found and removed
+                \return False if not succesfully removed - error OR not found
+****************************************************************************
+***/
+
 
 		friend std::ostream& operator<<(std::ostream& os, sllist<T> const* list){
 			slnode<T>* child_node = list->head;
@@ -107,18 +183,13 @@ namespace MK2 {
 	template<class T>
 	template<typename U>
     sllist<T>::slnode<U>::slnode() : value(U()), next(nullptr) {
-        /*...*/
+        
     }
 
 	//Copy Constructor list
 	template<class T>
-	sllist<T>::sllist(sllist<T> const& cpy) : head(nullptr) {
+	sllist<T>::sllist(sllist<T> const& cpy) : head(nullptr), size(0) {
         if(cpy.head == nullptr){
-            	/*!*************************************************************************
-    **** 
-                \return exception
-                ****************************************************************************
-    ***/
             return;
         }else{
             //Ver. 1.0 Suspect no memory overrwrite with this implementation
@@ -132,7 +203,7 @@ namespace MK2 {
                 ts_head = ts_head->next;
             }
             this->tail = ts_head;
-
+            this->size = cpy.getSize();
         }
     }
 
@@ -153,7 +224,7 @@ namespace MK2 {
     }
 
 	template<class T>
-	void sllist<T>::clear(){
+	constexpr void sllist<T>::clear(){
         //Wrap-around exception
         slnode<T> *child_node = this->head;
         while(child_node){
@@ -166,7 +237,7 @@ namespace MK2 {
     }
 
 	template<class T>
-	void sllist<T>::print() const{
+	constexpr void sllist<T>::print() const{
         slnode<T>* child_node = this->head;
         while(child_node){
             std::cout<<child_node->value<<" ";
@@ -190,7 +261,7 @@ namespace MK2 {
         this->size++;
     }
 	template<class T>
-	size_t sllist<T>::getSize() const{
+	constexpr size_t sllist<T>::getSize() const noexcept{
         return this->size;
     }
 
