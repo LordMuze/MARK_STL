@@ -3,21 +3,149 @@
 
 #include <cstddef>
 #include <iostream>
+#include <vector>
+/*For debugging purposes:*/
+#include <typeinfo>
 
 namespace MK2 {
+    template<typename U>
+    class _iterator{
+        public:
+/*!*****************************************************************************       	
+    \brief Value type of value in the nodes
+*******************************************************************************/
+
+            using DataType = typename U::DataType; // VALUE IN SLNODE
+
+/*!*****************************************************************************       	
+    \brief Value type of value in the nodes
+*******************************************************************************/        
+            using DataRef = DataType&;
+
+/*!*****************************************************************************       	
+    \brief Data type that is the Node itself 
+    \return slnode<T>
+*******************************************************************************/   
+
+            using TypeValue = typename U::ValueType; //SLNODE
+/*!*****************************************************************************       	
+    \brief Reference type of the node 
+    \return slnode<T>&
+*******************************************************************************/   
+            using ReferenceType = TypeValue&;
+/*!*****************************************************************************       	
+    \brief Pointer type of the node 
+    \return slnode<T>*
+*******************************************************************************/   
+            using PointerType = TypeValue*;
+/*!*****************************************************************************       	
+    \brief Default constructor deprecated
+*******************************************************************************/   
+            _iterator() = delete;
+/*!*****************************************************************************       	
+    \brief Constructor that accepts pointer pointing to any part of the list (nodes)
+*******************************************************************************/   
+            _iterator(PointerType ptr);
+/*!*****************************************************************************       	
+    \brief Constructor that accepts reference pointing to any part of the list (nodes)
+    \brief Sets the iterator object private - pointer pointing to that particular node!
+*******************************************************************************/   
+            _iterator(ReferenceType refType);
+/*!*****************************************************************************       	
+    \brief Default destructor for iterator is used (compiler defined)
+*******************************************************************************/   
+            ~_iterator() = default;
+/*!*****************************************************************************       	
+    \brief Accepts another iterator by reference const.
+*******************************************************************************/   
+            _iterator(_iterator const&);
+/*!*****************************************************************************       	
+    \brief Increments by one node in the list. 
+    \return returns the incremented position
+*******************************************************************************/   
+            _iterator& operator++();
+/*!*****************************************************************************       	
+    \brief Increments by one node in the list. 
+    \return returns the position before increment.
+*******************************************************************************/ 
+            _iterator operator++(int);
+/*!*****************************************************************************       	
+    \brief Compares the elements of the list
+    \return returns FALSE IF BOTH ARE EQUAL
+*******************************************************************************/ 
+            bool operator!=(_iterator const& rhs);
+
+/*!*****************************************************************************       	
+    \brief Evaluates THE VALUE THAT IS IN THE NODE
+    \brief User can amend the value that resides in the node with this operator
+    \return returns a reference to THAT VALUE IN THE NODE
+
+*******************************************************************************/ 
+            DataRef operator*();
+
+        private:
+            PointerType ptr;
+
+    };
+    template<typename T>
+    _iterator<T>::_iterator(PointerType ptr){
+        this->ptr = ptr;
+    }
+
+    template<typename T>
+    _iterator<T>::_iterator(ReferenceType rftr){
+        this->ptr = &(rftr);
+    }
+
+    template<typename T>
+    _iterator<T>::_iterator(_iterator const&itr){
+        this->ptr = itr.ptr;
+    }
+    template<typename T>
+    _iterator<T>& _iterator<T>::operator++(){
+        ptr = ptr->next;
+        return *this;
+    }
+
+   template<typename T>
+    _iterator<T> _iterator<T>::operator++(int){
+        PointerType temp = this->ptr;
+        ptr = ptr->next;
+        return _iterator(temp);
+    }
+
+    template<typename T>
+    bool _iterator<T>::operator!=(_iterator const& rhs){
+        if(this->ptr != rhs.ptr){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    template<typename T>
+    typename _iterator<T>::DataRef _iterator<T>::operator*(){
+        return ptr->value;
+    }
+
+
 	template<class T>
 	class sllist
 	{
+
 	public:
 		template<typename U>
 		struct slnode
 		{
+            using NodeData = U;
 			slnode();
 			~slnode() = default;
 			
 			U value;  // data portion
 			slnode* next;
 		};
+        using ValueType = sllist<T>::slnode<T>;
+        using Iterator = _iterator<sllist<T>>;
+        using DataType = typename ValueType::NodeData;
 /*!*****************************************************************************       	
     \brief Default Constructor
 *******************************************************************************/
@@ -46,6 +174,14 @@ namespace MK2 {
 
 
 		sllist<T>& operator=(sllist<T> const&);
+
+
+/*!*****************************************************************************       	
+    \brief Copy Assignment Operator for pointer
+    \param forward_list_pointer
+*******************************************************************************/
+
+		sllist<T>& operator=(sllist<T>* const);
 /*!*****************************************************************************       	
     \brief Resize the container by deleting or adding n number of nodes
     \param size_t no. of total elements in the list
@@ -104,24 +240,22 @@ namespace MK2 {
 
 		slnode<T>* find(T value) const;
 /*!*************************************************************************
-    ****       	\brief Returns the queried node by index. If index is larger than the array size, returns nullptr. //throwing an exception will be a thing in the future
-                \return slnode reference
-				\return nullptr if larger than array size or invalid value (i.e. negative value) 
-****************************************************************************
-***/
+    \brief Returns the queried VALUE IN THE NODE by index. If index is larger than the array size, returns nullptr. //throwing an exception will be a thing in the future
+    \return type reference
+	\return nullptr if larger than array size or invalid value (i.e. negative value) 
+******************************************************************************/
 		
 
 
         T& operator[](size_t index);
 
 /*!*************************************************************************
-    ****       	\brief Inserts a node containing the value specified by argument at a specified position within the list
-                \brief If position is more than list, insert at the last end of the list
-                \brief If position < 1, insert at the front of the list
-                \return slnode reference
-				\return nullptr if larger than array size or invalid value (i.e. negative value) 
-****************************************************************************
-***/
+    \brief Inserts a node containing the value specified by argument at a specified position within the list
+    \brief If position is more than list, insert at the last end of the list
+    \brief If position < 1, insert at the front of the list
+    \return slnode reference
+	\return nullptr if larger than array size or invalid value (i.e. negative value) 
+*****************************************************************************/
 
 		// Insert value in linked list at index.
 		// Assume zero-based indexing with 1st element at index 0, the second element
@@ -133,25 +267,44 @@ namespace MK2 {
 		void insert_after(T value, size_t position);
 
 /*!*************************************************************************
-    ****       	\brief Remove a node based on the argument specified 
-				\param Object()
-                \return True if successfully removed - found and removed
-                \return False if not succesfully removed - error OR not found
-****************************************************************************
-***/
+    \brief Remove a node based on the argument specified 
+	\param Object()
+    \return True if successfully removed - found and removed
+    \return False if not succesfully removed - error OR not found
+*****************************************************************************/
 
 
 		bool remove_first(T value);
 
 		// friend std::ostream& operator<<(std::ostream& output, sllist<T> const& list);
 
+
 /*!*************************************************************************
-    ****       	\brief Prints the entire list to the std::cout stream
-				\param Object()
-                \return True if successfully removed - found and removed
-                \return False if not succesfully removed - error OR not found
-****************************************************************************
-***/
+    \brief Begin
+    \return Returns an Iterator object pointing at the element,  at the beginning of the list
+*****************************************************************************/
+    
+    Iterator begin(){
+        return Iterator(this->head);
+    }
+
+/*!*************************************************************************
+    \brief End
+    \return Returns an Iterator object pointing after the last element in the list
+
+*****************************************************************************/
+    Iterator end(){
+        return Iterator((this->tail)->next);
+    }
+
+
+
+/*!*************************************************************************
+    \brief Prints the entire list to the std::cout stream
+	\param Object()
+    \return True if successfully removed - found and removed
+    \return False if not succesfully removed - error OR not found
+*****************************************************************************/
 
 
 		friend std::ostream& operator<<(std::ostream& os, sllist<T> const* list){
@@ -173,6 +326,10 @@ namespace MK2 {
 	private:
 		size_t size;
 	};
+
+
+
+
 
 
 	// Constructor for node
